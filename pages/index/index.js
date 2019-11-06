@@ -216,17 +216,41 @@ Page({
             wx.cloud.getTempFileURL({
               fileList: [fileID],
               success: (res) => {
+                console.log(res)
                 // 获取图片列表
                 // console.log(res.fileList)
                 // 上传的图片Url地址
                 console.log(res.fileList[0].tempFileURL)
 
+                const imgUrl = res.fileList[0].tempFileURL
+                const fileId = res.fileList[0].fileID
+
                 // 显示上传图片的缩略图
                 this.setData({
-                  avatarImg: res.fileList[0].tempFileURL
+                  avatarImg: imgUrl
                 })
 
-                wx.hideLoading();
+                
+
+                // 添加商品到数据库(包含商品图)
+                db.collection('emall').add({
+                  data: {
+                    title: '商品2',
+                    price: 18,
+                    tags: ['books', 'food'],
+                    fileId: fileId,
+                    image: imgUrl
+                  },
+                  success: (res) => {
+                    console.log(res)
+                    wx.showToast({
+                      title: '添加商品成功'
+                    })
+                    wx.hideLoading();
+
+                  }
+                })
+
               },
               fail: (err) => {
                 // handle error

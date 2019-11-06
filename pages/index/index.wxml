@@ -17,7 +17,7 @@
       <view class="fun-upload">
         <!-- <button type="primary" bindtap="chooseImg">选择头像</button> -->
         <image wx:if="{{avatarImg}}" src="{{avatarImg}}" class="img-avatar"></image>
-        <button type="primary" bindtap="uploadImg">上传头像</button>
+        <button type="primary" bindtap="uploadImg">上传图片</button>
       </view>
     </view>
   </view>
