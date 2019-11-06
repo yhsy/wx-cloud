@@ -26,3 +26,11 @@
 .m-fun button{
   margin-top: 40rpx;
 }
+.fun-upload{
+  text-align: center;
+}
+.fun-upload .img-avatar{
+  margin-top: 20rpx;
+  width: 200rpx;
+  height: 200rpx;
+}

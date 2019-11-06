@@ -64,7 +64,7 @@ Page({
         b: 15
       },
       success: (res) => {
-        console.log(res)
+        // console.log(res)
         // 用户openid
         // console.log(res.result.info.OPENID)
         // 通过云函数拿到用户的openid
@@ -110,8 +110,7 @@ Page({
       }
     })
   },
-  // 选择图片
-  // 现在本地选择图片
+  // 上传图片-方法1-使用日期的名字
   chooseImg(){
     // 本地选择图片
     wx.chooseImage({
@@ -181,12 +180,66 @@ Page({
       }
     })
   },
-  // 上传图片
+  // 上传图片(自动获取名字)
   uploadImg(){
-    wx.showToast({
-      title: '上传图片',
-    })
+    // 选择图片
+    wx.chooseImage({
+      // 图片数量
+      count: 1,
+      success: (res) => {
+        // 本地临时路径
+        const tempFilePaths = res.tempFilePaths[0];
+        const tempPathArr = tempFilePaths.split('.');
 
+        // 图片扩展名
+        const extName = tempPathArr[tempPathArr.length - 1];
+        // 文件名
+        const textName = tempPathArr[tempPathArr.length - 2];
+        // 图片名称(文件名+扩展名)
+        const imgName = 'avatar-' + textName + '.' + extName;
+
+        wx.showLoading({
+          title: '上传中,请稍后',
+        })
+
+        // 上传图片
+        wx.cloud.uploadFile({
+          // 指定上传到的云路径
+          cloudPath: `emall/img/${imgName}`,
+          // 指定要上传的文件的小程序临时文件路径
+          filePath: tempFilePaths,
+          success: (res) => {
+            // console.log(res)
+            // 获取fileID
+            const fileID = res.fileID;
+            // 通过fileID获取文件的真实URL地址
+            wx.cloud.getTempFileURL({
+              fileList: [fileID],
+              success: (res) => {
+                // 获取图片列表
+                // console.log(res.fileList)
+                // 上传的图片Url地址
+                console.log(res.fileList[0].tempFileURL)
+
+                // 显示上传图片的缩略图
+                this.setData({
+                  avatarImg: res.fileList[0].tempFileURL
+                })
+
+                wx.hideLoading();
+              },
+              fail: (err) => {
+                // handle error
+              }
+            })
+          },
+          fail: (err) => {
+            console.log(err)
+          }
+        })
+
+      },
+    })  
 
   }
 })
