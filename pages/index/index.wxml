@@ -1,0 +1,13 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <!-- 获取用户信息 -->
+    <!-- 点击按钮触发函数 -->
+    <button wx:if="{{!userInfo.openid}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
+    <block wx:if="{{userInfo.openid}}">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <button type="primary" bindtap="addMall">添加商品</button>
+    </block>
+  </view>
+</view>
