@@ -14,6 +14,15 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const unixTime = () => {
+  // const timestamp = Date.parse(new Date());
+  // const date = new Date(timestamp);
+  const date = new Date();
+  const uTime = date.getTime()
+  return uTime
+}
+
 module.exports = {
-  formatTime: formatTime
+  formatTime: formatTime,
+  unixTime
 }

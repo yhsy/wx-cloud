@@ -19,3 +19,10 @@
 .usermotto {
   margin-top: 200px;
 }
+.m-fun{
+  /* background-color: #f00; */
+  /* padding: 20rpx 0; */
+}
+.m-fun button{
+  margin-top: 40rpx;
+}

@@ -5,12 +5,16 @@ const app = getApp()
 // 获取云数据库实例
 const db = wx.cloud.database();
 
+// 获取当前的时间戳
+import { unixTime } from '../../utils/util.js'
+
 Page({
   data: {
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    avatarImg: ''
   },
   //事件处理函数
   bindViewTap: function() {
@@ -89,9 +93,9 @@ Page({
   },
   // 添加商品
   addMall(){
-    wx.showToast({
-      title: '添加',
-    })
+    // wx.showToast({
+    //   title: '添加',
+    // })
     db.collection('emall').add({
       data: {
         title: '商品1',
@@ -105,5 +109,84 @@ Page({
         })
       }
     })
+  },
+  // 选择图片
+  // 现在本地选择图片
+  chooseImg(){
+    // 本地选择图片
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+      success:(res) => {
+        console.log(res)
+        // tempFilePath可以作为img标签的src属性显示图片
+        const tempFilePaths = res.tempFilePaths[0]
+        // console.log(tempFilePaths)
+        // console.log(typeof tempFilePaths)
+        const arrPath = tempFilePaths.split('.')
+        // 图片格式-图片扩展名(png/jpg)
+        const extName = arrPath[3];
+        // unix时间戳
+        const utime = unixTime();
+        // 图片格式
+        // console.log(arrPath[3])
+
+        // 本地预览
+        // this.setData({
+        //   avatarImg: tempFilePaths
+        // })
+
+        // 图片名称(时间戳+图片格式)
+        const fName = utime + '.' + extName;
+        // console.log(fName)
+
+        // 上传图片到指定目录
+        wx.cloud.uploadFile({
+          // 指定上传到的云路径
+          cloudPath: `emall/img/${fName}`,
+          // 指定要上传的文件的小程序临时文件路径
+          filePath: tempFilePaths,
+          // 成功回调
+          success: (res) => {
+            console.log(res)
+            // 获取云文件ID
+            console.log(res.fileID)
+
+            // 通过云文件ID获取图片真实url地址
+            wx.cloud.getTempFileURL({
+              fileList: [res.fileID],
+              success: (res) => {
+                console.log(res)
+                // get temp file URL
+                console.log(res.fileList)
+                // console.log(res.fileList[0].tempFileURL)
+                this.setData({
+                  avatarImg: res.fileList[0].tempFileURL
+                })
+              },
+              fail: (err) => {
+                console.log(err)
+                // handle error
+              }
+            })
+
+          },
+          fail: err => {
+            console.log(err)
+            // handle error
+          }
+        })
+
+      }
+    })
+  },
+  // 上传图片
+  uploadImg(){
+    wx.showToast({
+      title: '上传图片',
+    })
+
+
   }
 })
