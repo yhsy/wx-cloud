@@ -19,6 +19,9 @@
         <image wx:if="{{avatarImg}}" src="{{avatarImg}}" class="img-avatar"></image>
         <button type="primary" bindtap="uploadImg">上传图片</button>
       </view>
+      <view class="fun-goods">
+        <button type="primary" bindtap="getGoods">获取商品列表</button>
+      </view>
     </view>
   </view>
 </view>

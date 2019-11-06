@@ -265,5 +265,14 @@ Page({
       },
     })  
 
+  },
+  // 获取商品列表
+  getGoods(){
+    console.log('获取商品列表')
+    db.collection('emall').get({
+      success: (res) => {
+        console.log(res)
+      }
+    })
   }
 })
